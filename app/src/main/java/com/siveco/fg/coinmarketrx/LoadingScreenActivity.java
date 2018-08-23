@@ -19,8 +19,6 @@ public class LoadingScreenActivity extends Activity {
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run() {
-                Intent mainIntent = new Intent(LoadingScreenActivity.this, MainActivity.class);
-                LoadingScreenActivity.this.startActivity(mainIntent);
                 LoadingScreenActivity.this.finish();
             }
         }, WAIT_TIME);
