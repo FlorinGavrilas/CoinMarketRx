@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CoinMarketRx</string>
+    <string name="tv_loading">Please wait while your data gets loaded...</string>
 </resources>

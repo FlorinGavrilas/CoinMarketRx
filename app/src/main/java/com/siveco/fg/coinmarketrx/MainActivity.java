@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.siveco.fg.coinmarketrx.retrofit.info.Info;
@@ -28,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
     private APIInterface apiInterface;
     private List<Datum> cryptoList = null;
 
+    ProgressBar progressBar;
+    TextView tvLoading;
+
 
     /* The IDE does not know what potential effects your subscription can have when it's not disposed, so it treats it as potentially unsafe.
        For example, your Single may contain a network call, which could cause a memory leak if your Activity is abandoned during its execution.
@@ -40,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        tvLoading = (TextView) findViewById(R.id.tvLoading);
+        tvLoading.setVisibility(View.INVISIBLE);
+        progressBar = (ProgressBar) findViewById(R.id.mainSpinner1);
+        progressBar.setVisibility(View.INVISIBLE);
 
         initRecyclerView();
         getCoinList();
@@ -84,9 +94,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void getCoinList() {
 
-        //loading screen
-        Intent intentLoading = new Intent(MainActivity.this, LoadingScreenActivity.class);
-        startActivity(intentLoading);
+        tvLoading.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
 
         //IDE is satisfied that the Disposable is being managed.
         compositeDisposable.add(apiInterface.getMarketPairsLatest("100")
@@ -95,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
                 .subscribeWith(new DisposableSingleObserver<CryptoList>() {
                     @Override
                     public void onSuccess(CryptoList list) {
+
+                        tvLoading.setVisibility(View.INVISIBLE);
+                        progressBar.setVisibility(View.INVISIBLE);
                         cryptoList.clear();
                         cryptoList.addAll(list.getData());
                         updateLogoList();
@@ -102,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
+                        tvLoading.setVisibility(View.INVISIBLE);
+                        progressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(MainActivity.this, "onFailure", Toast.LENGTH_SHORT).show();
                         Log.d("XXXX", e.getLocalizedMessage());
                     }
