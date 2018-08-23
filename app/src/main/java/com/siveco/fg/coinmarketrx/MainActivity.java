@@ -83,6 +83,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void getCoinList() {
+
+        //loading screen
+        Intent intentLoading = new Intent(MainActivity.this, LoadingScreenActivity.class);
+        startActivity(intentLoading);
+
         //IDE is satisfied that the Disposable is being managed.
         compositeDisposable.add(apiInterface.getMarketPairsLatest("100")
                 .subscribeOn(Schedulers.io())
