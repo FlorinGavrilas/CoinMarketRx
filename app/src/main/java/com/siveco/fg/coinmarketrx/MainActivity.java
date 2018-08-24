@@ -30,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private APIInterface apiInterface;
     private List<Datum> cryptoList = null;
 
-    ProgressBar progressBar;
-    TextView tvLoading;
+    public ProgressBar progressBar;
+    public TextView tvLoading;
 
 
     /* The IDE does not know what potential effects your subscription can have when it's not disposed, so it treats it as potentially unsafe.
@@ -104,9 +104,6 @@ public class MainActivity extends AppCompatActivity {
                 .subscribeWith(new DisposableSingleObserver<CryptoList>() {
                     @Override
                     public void onSuccess(CryptoList list) {
-
-                        tvLoading.setVisibility(View.INVISIBLE);
-                        progressBar.setVisibility(View.INVISIBLE);
                         cryptoList.clear();
                         cryptoList.addAll(list.getData());
                         updateLogoList();
@@ -114,8 +111,6 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        tvLoading.setVisibility(View.INVISIBLE);
-                        progressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(MainActivity.this, "onFailure", Toast.LENGTH_SHORT).show();
                         Log.d("XXXX", e.getLocalizedMessage());
                     }
@@ -139,6 +134,9 @@ public class MainActivity extends AppCompatActivity {
                 .subscribeWith(new DisposableSingleObserver<Info>() {
                     @Override
                     public void onSuccess(Info coinInfo) {
+                        tvLoading.setVisibility(View.INVISIBLE);
+                        progressBar.setVisibility(View.INVISIBLE);
+
                         adapter.getCryptoListIcons().clear();
                         adapter.getCryptoListIcons().putAll(coinInfo.getData());
                         adapter.notifyDataSetChanged();
@@ -146,6 +144,9 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
+                        tvLoading.setVisibility(View.INVISIBLE);
+                        progressBar.setVisibility(View.INVISIBLE);
+
                         Toast.makeText(MainActivity.this, "getCryptocurrencyInfo onFailure", Toast.LENGTH_SHORT).show();
                         Log.d("XXXX", e.getLocalizedMessage());
                     }

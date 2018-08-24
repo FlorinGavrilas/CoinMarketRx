@@ -2,7 +2,11 @@ package com.siveco.fg.coinmarketrx;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +21,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+
+    Resources resources;
 
     private List<Datum> mData;
     private ItemClickListener mClickListener;
@@ -52,6 +59,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         // Get the data model based on position
         final Datum datum = mData.get(position);
 
+        SpannableString text;
+
         // Set item views based on your views and data model
         TextView name = holder.name;
         name.setText(datum.getName() + " (" + datum.getSymbol() + ")");
@@ -65,14 +74,30 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView volume24h = holder.volume24h;
         volume24h.setText("Volume/24h: $" + String.format("%,d", Math.round(datum.getQuote().getUSD().getVolume24h())));
 
+
         TextView textView1h = holder.textView1h;
-        textView1h.setText(String.format("1h: %.2f", datum.getQuote().getUSD().getPercentChange1h()) + "%");
+        //color
+        text = new SpannableString(String.format("1h: %.2f", datum.getQuote().getUSD().getPercentChange1h()) + "%");
+        setColor_1_7_24(text, datum.getQuote().getUSD().getPercentChange1h(), 0);
+        //end
+        textView1h.setText(text);
+
+
 
         TextView textView24h = holder.textView24h;
-        textView24h.setText(String.format("24h: %.2f", datum.getQuote().getUSD().getPercentChange24h()) + "%");
+        //coloring the text
+        text = new SpannableString(String.format("24h: %.2f", datum.getQuote().getUSD().getPercentChange24h()) + "%");
+        setColor_1_7_24(text, datum.getQuote().getUSD().getPercentChange24h(), 1);
+        //end
+        textView24h.setText(text);
+
 
         TextView textView7d = holder.textView7d;
-        textView7d.setText(String.format("7d: %.2f", datum.getQuote().getUSD().getPercentChange7d()) + "%");
+        //color
+        text = new SpannableString(String.format("7d: %.2f", datum.getQuote().getUSD().getPercentChange7d()) + "%");
+        setColor_1_7_24(text, datum.getQuote().getUSD().getPercentChange7d(), 0);
+        //end
+        textView7d.setText(text);
 
         ImageView icon = holder.icon;
         String logoURL = cryptoListIcons.get(datum.getSymbol()).getLogo();
@@ -85,6 +110,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
     }
+
+    public void setColor_1_7_24(SpannableString spannableString, double number, int poz) {
+        if(number < 0) {
+            spannableString.setSpan(new ForegroundColorSpan(Color.RED), 3 + poz, 10 + poz, 0);
+        } else {
+            resources = context.getResources();
+            spannableString.setSpan(new ForegroundColorSpan(resources.getColor(R.color.verde)), 3 + poz, 9 + poz, 0);
+        }
+    }
+
+
+
 
 
     // Returns the total count of items in the list
