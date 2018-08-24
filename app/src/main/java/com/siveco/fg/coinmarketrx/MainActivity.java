@@ -134,12 +134,12 @@ public class MainActivity extends AppCompatActivity {
                 .subscribeWith(new DisposableSingleObserver<Info>() {
                     @Override
                     public void onSuccess(Info coinInfo) {
-                        tvLoading.setVisibility(View.INVISIBLE);
-                        progressBar.setVisibility(View.INVISIBLE);
-
                         adapter.getCryptoListIcons().clear();
                         adapter.getCryptoListIcons().putAll(coinInfo.getData());
                         adapter.notifyDataSetChanged();
+
+                        tvLoading.setVisibility(View.INVISIBLE);
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
 
                     @Override
